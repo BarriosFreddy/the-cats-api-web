@@ -1,0 +1,114 @@
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 30px;
+}
+
+.home-header h1 {
+  color: #333;
+  margin: 0;
+  font-size: 28px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-info span {
+  color: #7f8c8d;
+  font-size: 16px;
+}
+
+.logout-button {
+  padding: 8px 16px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #c0392b;
+}
+
+/* Home Content */
+.home-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Breeds Selection Dropdown */
+.breeds-selection {
+  margin-bottom: 20px;
+}
+
+.breeds-selection h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.breed-dropdown {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+.breed-dropdown:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+}
+
+.features-section h3 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.features-section ul {
+  padding-left: 20px;
+}
+
+.features-section li {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  .home-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .home-content {
+    grid-template-columns: 1fr;
+  }
+}

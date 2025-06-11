@@ -1,0 +1,10 @@
+<div class="notifications-container">
+  <div *ngFor="let notification of notifications" 
+       class="notification" 
+       [ngClass]="getNotificationClass(notification.type)"
+       [@notificationAnimation]="'visible'">
+    <div class="notification-icon">{{ getNotificationIcon(notification.type) }}</div>
+    <div class="notification-content">{{ notification.message }}</div>
+    <button class="notification-dismiss" (click)="dismiss(notification)">×</button>
+  </div>
+</div>

@@ -1,0 +1,163 @@
+<div class="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center py-6 px-3 sm:py-12 sm:px-6 lg:px-8 animate-fade-in">
+  <div class="max-w-md w-full bg-white rounded-xl shadow-xl overflow-hidden p-4 sm:p-8 space-y-4 sm:space-y-6 transform transition-all duration-300 hover:shadow-2xl">
+    <!-- Header with Cat Icon -->
+    <div class="text-center">
+      <div class="flex justify-center">
+        <lucide-icon [img]="CatIcon" class="h-14 w-14 text-accent-500 transform transition-all duration-500 hover:scale-110"></lucide-icon>
+      </div>
+      <h2 class="mt-4 text-3xl font-extrabold text-primary-800">Crear Cuenta</h2>
+      <p class="mt-2 text-sm text-gray-500">Regístrate para explorar razas de gatos</p>
+    </div>
+    
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <lucide-icon [img]="XCircleIcon" class="h-5 w-5 text-red-500"></lucide-icon>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-red-700">{{ errorMessage }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Register Form -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5" autocomplete="on">
+      <!-- Name Field -->
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <input 
+            type="text" 
+            id="name" 
+            name="name"
+            autocomplete="name"
+            formControlName="name" 
+            placeholder="Ingresa tu nombre"
+            class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            [ngClass]="{'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500': registerForm.get('name')?.invalid && registerForm.get('name')?.touched, 
+                     'border-gray-300 focus:border-primary-500': !(registerForm.get('name')?.invalid && registerForm.get('name')?.touched)}"
+          >
+          <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <lucide-icon [img]="AlertCircleIcon" class="h-5 w-5 text-red-500"></lucide-icon>
+          </div>
+        </div>
+        <div class="mt-1 text-sm text-red-600" *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+          El nombre es obligatorio
+        </div>
+      </div>
+      
+      <!-- Email Field -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <input 
+            type="email" 
+            id="email" 
+            name="email"
+            autocomplete="email"
+            formControlName="email" 
+            placeholder="Ingresa tu correo electrónico"
+            class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            [ngClass]="{'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500': registerForm.get('email')?.invalid && registerForm.get('email')?.touched, 
+                      'border-gray-300 focus:border-primary-500': !(registerForm.get('email')?.invalid && registerForm.get('email')?.touched)}"
+          >
+          <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <lucide-icon [img]="AlertCircleIcon" class="h-5 w-5 text-red-500"></lucide-icon>
+          </div>
+        </div>
+        <div class="mt-1 text-sm text-red-600" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          <span *ngIf="registerForm.get('email')?.errors?.['required']">El correo electrónico es obligatorio</span>
+          <span *ngIf="registerForm.get('email')?.errors?.['email']">Por favor ingresa un correo electrónico válido</span>
+        </div>
+      </div>
+      
+      <!-- Password Field -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <input 
+            type="password" 
+            id="password" 
+            name="password"
+            autocomplete="new-password"
+            formControlName="password" 
+            placeholder="Ingresa tu contraseña"
+            class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            [ngClass]="{'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500': registerForm.get('password')?.invalid && registerForm.get('password')?.touched, 
+                      'border-gray-300 focus:border-primary-500': !(registerForm.get('password')?.invalid && registerForm.get('password')?.touched)}"
+          >
+          <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <lucide-icon [img]="AlertCircleIcon" class="h-5 w-5 text-red-500"></lucide-icon>
+          </div>
+        </div>
+        <div class="mt-1 text-sm text-red-600" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          <span *ngIf="registerForm.get('password')?.errors?.['required']">La contraseña es obligatoria</span>
+          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres</span>
+        </div>
+      </div>
+      
+      <!-- Confirm Password Field -->
+      <div>
+        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirmar Contraseña</label>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <input 
+            type="password" 
+            id="confirmPassword" 
+            name="confirm-password"
+            autocomplete="new-password"
+            formControlName="confirmPassword" 
+            placeholder="Confirma tu contraseña"
+            class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            [ngClass]="{'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500': 
+                      (registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) ||
+                      (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched), 
+                      'border-gray-300 focus:border-primary-500': !((registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) ||
+                      (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched))}"
+          >
+          <div *ngIf="(registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) ||
+                    (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched)" 
+               class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <lucide-icon [img]="AlertCircleIcon" class="h-5 w-5 text-red-500"></lucide-icon>
+          </div>
+        </div>
+        <div class="mt-1 text-sm text-red-600" *ngIf="
+              (registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) ||
+              (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched)">
+          <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Por favor confirma tu contraseña</span>
+          <span *ngIf="registerForm.hasError('passwordMismatch')">Las contraseñas no coinciden</span>
+        </div>
+      </div>
+      
+      <!-- Submit Button -->
+      <div class="pt-2">
+        <button 
+          type="submit" 
+          [disabled]="registerForm.invalid || isSubmitting" 
+          class="group relative w-full flex justify-center py-2 sm:py-3 px-4 border border-transparent rounded-md text-white font-medium focus:outline-none transition-all duration-300 transform hover:-translate-y-0.5"
+          [ngClass]="{'bg-accent-600 hover:bg-accent-700 focus:ring-2 focus:ring-offset-2 focus:ring-accent-500': !isSubmitting && !registerForm.invalid,
+                    'bg-gray-400 cursor-not-allowed': isSubmitting || registerForm.invalid}"
+        >
+          <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+            <lucide-icon [img]="LockIcon" class="h-5 w-5" [ngClass]="{'text-accent-300 group-hover:text-accent-400': !isSubmitting && !registerForm.invalid, 'text-gray-300': isSubmitting || registerForm.invalid}"></lucide-icon>
+          </span>
+          <span *ngIf="!isSubmitting">Registrarse</span>
+          <div *ngIf="isSubmitting" class="flex items-center">
+            <lucide-icon [img]="LoaderIcon" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"></lucide-icon>
+            <span>Registrando...</span>
+          </div>
+        </button>
+      </div>
+      
+      <!-- Login Link -->
+      <div class="text-center mt-4">
+        <p class="text-sm text-gray-600">
+          ¿Ya tienes una cuenta? 
+          <a routerLink="/login" class="font-medium text-primary-600 hover:text-primary-500 transition-colors">
+            Iniciar sesión
+          </a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+# Node modules
+node_modules
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+
+# Version control
+.git
+.gitignore
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Coverage directories
+coverage
+/.angular/cache

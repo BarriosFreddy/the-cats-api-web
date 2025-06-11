@@ -1,0 +1,102 @@
+<div class="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 p-3 sm:p-6">
+  <div class="w-full max-w-md bg-white rounded-xl shadow-xl p-4 sm:p-8 space-y-4 sm:space-y-8 animate-fade-in">
+    <div class="text-center">
+      <div class="flex justify-center">
+        <lucide-icon [img]="CatIcon" class="h-14 w-14 text-primary-600 transform transition-all duration-500 hover:scale-110"></lucide-icon>
+      </div>
+      <h2 class="mt-4 text-3xl font-extrabold text-primary-800">Bienvenido de Nuevo</h2>
+      <p class="mt-2 text-sm text-gray-500">Inicia sesión para seguir explorando razas de gatos</p>
+    </div>
+    
+    <div *ngIf="errorMessage" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <lucide-icon [img]="XCircleIcon" class="h-5 w-5 text-red-500"></lucide-icon>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-red-700">{{ errorMessage }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6" autocomplete="on">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <input 
+            type="email" 
+            id="email" 
+            name="email"
+            autocomplete="email"
+            formControlName="email" 
+            placeholder="Ingresa tu correo electrónico"
+            class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            [ngClass]="{'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500': loginForm.get('email')?.invalid && loginForm.get('email')?.touched, 
+                     'border-gray-300 focus:border-primary-500': !(loginForm.get('email')?.invalid && loginForm.get('email')?.touched)}"
+          >
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" 
+               *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            <lucide-icon [img]="XCircleIcon" class="h-5 w-5 text-red-500"></lucide-icon>
+          </div>
+        </div>
+        <div class="mt-1 text-sm text-red-600" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">El correo electrónico es obligatorio</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">Por favor ingresa un correo electrónico válido</span>
+        </div>
+      </div>
+      
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <input 
+            type="password" 
+            id="password" 
+            name="password"
+            autocomplete="current-password"
+            formControlName="password" 
+            placeholder="Ingresa tu contraseña"
+            class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            [ngClass]="{'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500': loginForm.get('password')?.invalid && loginForm.get('password')?.touched, 
+                     'border-gray-300 focus:border-primary-500': !(loginForm.get('password')?.invalid && loginForm.get('password')?.touched)}"
+          >
+          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <lucide-icon [img]="XCircleIcon" class="h-5 w-5 text-red-500"></lucide-icon>
+          </div>
+        </div>
+        <div class="mt-1 text-sm text-red-600" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">La contraseña es obligatoria</span>
+        </div>
+      </div>
+      
+      <!-- Submit Button -->
+      <div>
+        <button 
+          type="submit" 
+          [disabled]="isSubmitting || loginForm.invalid" 
+          class="group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-md text-white font-medium focus:outline-none transition-all duration-300 transform hover:-translate-y-0.5"
+          [ngClass]="{'bg-primary-600 hover:bg-primary-700 focus:ring-2 focus:ring-offset-2 focus:ring-primary-500': !isSubmitting && !loginForm.invalid,
+                    'bg-gray-400 cursor-not-allowed': isSubmitting || loginForm.invalid}"
+        >
+          <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+            <lucide-icon [img]="LockIcon" class="h-5 w-5" [ngClass]="{'text-primary-300 group-hover:text-primary-400': !isSubmitting && !loginForm.invalid, 'text-gray-300': isSubmitting || loginForm.invalid}"></lucide-icon>
+          </span>
+          <span *ngIf="!isSubmitting">Iniciar Sesión</span>
+          <div *ngIf="isSubmitting" class="flex items-center">
+            <lucide-icon [img]="LoaderIcon" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"></lucide-icon>
+            <span>Iniciando sesión...</span>
+          </div>
+        </button>
+      </div>
+      
+      <!-- Registration Link -->
+      <div class="text-center mt-4">
+        <p class="text-sm text-gray-600">
+          ¿No tienes una cuenta? 
+          <a routerLink="/register" class="font-medium text-primary-600 hover:text-primary-500 transition-colors">
+            Regístrate
+          </a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

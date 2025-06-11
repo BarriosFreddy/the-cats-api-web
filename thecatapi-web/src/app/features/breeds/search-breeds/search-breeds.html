@@ -1,0 +1,97 @@
+<div class="container mx-auto px-4 py-4 sm:py-8">
+    <!-- Navigation Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-center py-4 mb-8 border-b border-primary-200 gap-4">
+        <div class="flex items-center space-x-3">
+            <a routerLink="/home" class="flex items-center space-x-2 mb-2 sm:mb-0">
+                <lucide-icon [img]="CatIcon" class="h-8 w-8 text-primary-600"></lucide-icon>
+                <span class="font-semibold text-primary-700">Inicio</span>
+            </a>
+        </div>
+        <div class="flex items-center space-x-4">
+            <a 
+                routerLink="/profile"
+                class="btn btn-secondary w-full sm:w-auto flex items-center justify-center space-x-1 transform transition hover:-translate-y-0.5">
+                <lucide-icon [img]="UserIcon" class="h-5 w-5"></lucide-icon>
+                <span>Mi Perfil</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="flex flex-col items-center justify-center w-full">
+        <h1 class="text-3xl font-bold mb-6 text-secondary-700">Buscador de Razas de Gatos</h1>
+        
+        <!-- Search Form -->
+        <div class="bg-white shadow-lg rounded-xl p-4 sm:p-8 mb-6 sm:mb-10">
+            <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="space-y-3 sm:space-y-4">
+                <div class="flex-grow w-full">
+                    <input 
+                        type="text" 
+                        formControlName="query" 
+                        placeholder="Busca una raza de gato..."
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:border-transparent"
+                        autocomplete="off"
+                        name="search"
+                    >
+                    <div *ngIf="searchForm.get('query')?.invalid && searchForm.get('query')?.touched" class="text-red-500 text-sm mt-1">
+                        <span *ngIf="searchForm.get('query')?.errors?.['required']">La búsqueda es requerida</span>
+                        <span *ngIf="searchForm.get('query')?.errors?.['minlength']">Ingresa al menos 2 caracteres</span>
+                    </div>
+                </div>
+                <button 
+                    type="submit" 
+                    [disabled]="searchForm.invalid || isLoading"
+                    class="btn btn-primary w-full py-2 px-4 flex justify-center items-center"
+                >
+                    <span *ngIf="!isLoading">Buscar</span>
+                    <span *ngIf="isLoading" class="flex items-center">
+                        <lucide-icon [img]="LoaderIcon" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"></lucide-icon>
+                        Buscando...
+                    </span>
+                </button>
+            </form>
+            
+            <div class="mt-4 flex justify-between items-center">
+                <a routerLink="/home" class="text-primary-600 hover:underline flex items-center gap-1">
+                    <lucide-icon [img]="ChevronLeftIcon" class="h-4 w-4"></lucide-icon>
+                    Volver a inicio
+                </a>
+            </div>
+        </div>
+        
+        <!-- Results Table -->
+        <div *ngIf="hasSearched" class="w-full">
+            <div *ngIf="errorMessage" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+                <p>{{ errorMessage }}</p>
+            </div>
+            
+            <div *ngIf="!errorMessage && searchResults.length === 0 && !isLoading" class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+                <p>No se encontraron razas que coincidan con tu búsqueda.</p>
+            </div>
+            
+            <div *ngIf="searchResults.length > 0" class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
+                <table class="min-w-full divide-y divide-gray-300">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="py-3.5 px-4 text-left text-sm font-semibold text-gray-900">Nombre</th>
+                            <th scope="col" class="py-3.5 px-4 text-left text-sm font-semibold text-gray-900 hidden md:table-cell">Origen</th>
+                            <th scope="col" class="py-3.5 px-4 text-left text-sm font-semibold text-gray-900 hidden lg:table-cell">Temperamento</th>
+                            <th scope="col" class="py-3.5 px-4 text-center text-sm font-semibold text-gray-900">Inteligencia</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 bg-white">
+                        <tr *ngFor="let breed of searchResults">
+                            <td class="py-4 px-4 text-sm font-medium text-gray-900">{{ breed.name }}</td>
+                            <td class="py-4 px-4 text-sm text-gray-500 hidden md:table-cell">{{ breed.origin }}</td>
+                            <td class="py-4 px-4 text-sm text-gray-500 hidden lg:table-cell">{{ breed.temperament }}</td>
+                            <td class="py-4 px-4 text-sm text-amber-500 text-center">
+                                <div class="flex justify-center">
+                                    <span *ngFor="let star of getRatingStars(breed.intelligence)" class="inline-block">{{ star }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

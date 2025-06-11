@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # MongoDB service
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - catapi_network
+
+  # Backend REST API service
+  backend:
+    build:
+      context: ./thecatapi-rest
+      dockerfile: Dockerfile
+    container_name: thecatapi_backend
+    env_file: ".env"
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URI=mongodb://mongodb:27017/cats_db
+      - FRONTEND_URL=http://localhost:80
+      - JWT_SECRET=e5b84861c1c6892b4188ee13ad9ae0aa
+      - JWT_EXPIRES_IN=24h
+      - CAT_API_KEY=${CAT_API_KEY}
+      - CAT_API_URL=${CAT_API_URL}
+    networks:
+      - catapi_network
+
+  # Frontend Angular app service
+  frontend:
+    build:
+      context: ./thecatapi-web
+      dockerfile: Dockerfile
+    container_name: thecatapi_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - catapi_network
+
+networks:
+  catapi_network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
