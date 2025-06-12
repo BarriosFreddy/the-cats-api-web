@@ -1,28 +1,37 @@
-FROM node:18
+FROM node:20-slim as build
 
 WORKDIR /app
 
-# Install dependencies including bcrypt's requirements
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 make g++ \
+RUN apt-get update && apt-get install -y \
+    python3 make g++ build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json ./
 
-# Install dependencies with network retries
-RUN npm config set fetch-retries 5 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm ci
+RUN npm install --no-audit --no-fund
 
 COPY . .
 
 RUN npm run build
+
+FROM node:20-slim as production
+
+WORKDIR /app
+
+# Install python3 make
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 make g++ build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY package.json package-lock.json ./
+
+RUN npm install --omit=dev
+
+COPY --from=build /app/dist ./dist
 
 ENV NODE_ENV=production
 ENV PORT=3000
 
 EXPOSE 3000
 
-# Start the application
-CMD ["node", "--env-file=.env", "dist/index.js"]
+CMD ["node", "dist/index.js"]

@@ -18,6 +18,8 @@ FROM nginx:alpine
 # Copy the built app to NGINX html directory
 COPY --from=build /app/dist/thecatapi-web/browser /usr/share/nginx/html
 
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
